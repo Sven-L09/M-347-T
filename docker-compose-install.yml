@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  webserver:
+    image: jaba09/m347-webserver:latest
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+      - backend
+    restart: unless-stopped
+
+  backend:
+    image: jaba09/m347-backend:latest
+    environment:
+      DB_HOST: db
+      DB_USER: m347user
+      DB_PASSWORD: m347pass
+      DB_NAME: m347db
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: mariadb:10
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: m347db
+      MYSQL_USER: m347user
+      MYSQL_PASSWORD: m347pass
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    restart: unless-stopped
+
+volumes:
+  db_data:

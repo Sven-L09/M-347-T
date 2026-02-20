@@ -1,8 +1,65 @@
 # M-347 Webserver Projekt
 
-Dieses Projekt stellt eine Webseite mit **Nginx** und eine **MariaDB**-Datenbank in **Docker-Containern** bereit. Beide Services bleiben auch nach dem Stoppen und Starten der Container verfügbar, da die Daten über Docker-Volumes persistiert werden.
+Dieses Projekt stellt eine vollständige Webapplikation mit **Docker Compose** bereit:
+- **Nginx Webserver** mit HTML/CSS/JavaScript Frontend
+- **Node.js Express Backend API** für Todo-Verwaltung
+- **MariaDB Datenbank** mit persistenter Datenspeicherung
+- Responsive Design
 
-## Projektstruktur
+---
+
+## ⚡ Schnellstart
+
+### 🎯 Für Lehrpersonen & normale Nutzer (Docker Hub Images)
+
+**NUTZE DIESE VARIANTE:**
+
+```bash
+git clone https://github.com/DEINBENUTZERNAME/M-347-T.git
+cd M-347-T
+docker-compose -f docker-compose-install.yml up -d
+```
+
+**Browser:** http://localhost:8080
+
+✅ Images werden von Docker Hub (jaba09) gepullt - **keine lokalen Builds nötig!**
+
+⏱️ **Dauer:** ~30-60 Sekunden
+
+---
+
+### 🔨 Für Entwickler (lokal bauen)
+
+```bash
+git clone https://github.com/DEINBENUTZERNAME/M-347-T.git
+cd M-347-T
+docker-compose up -d --build
+```
+
+**Browser:** http://localhost:8080
+
+⏱️ **Dauer:** 2-5 Minuten (Images werden lokal gebaut)
+
+---
+
+## 📁 Zwei verschiedene Compose-Dateien
+
+| Datei | Verwendung | Für wen |
+|-------|-----------|---------|
+| **docker-compose-install.yml** | Images von Docker Hub (jaba09) | ✅ **Lehrpersonen & Schüler** |
+| **docker-compose.yml** | Images lokal bauen | 🔨 Entwickler |
+
+**Normaler Nutzer?** → Nutze `docker-compose-install.yml`!
+
+---
+
+## 📦 Docker Hub Images
+
+Die fertigen Images sind bereits auf Docker Hub verfügbar:
+- `jaba09/m347-webserver:latest` – https://hub.docker.com/r/jaba09/m347-webserver
+- `jaba09/m347-backend:latest` – https://hub.docker.com/r/jaba09/m347-backend
+
+Diese werden automatisch beim `docker-compose -f docker-compose-install.yml up -d` gezogen!
 
 ```
 M-347-T/
@@ -69,75 +126,93 @@ volumes:
 - **`db` Service** – MariaDB 10 mit einem benannten Volume `db_data` für persistente Datenspeicherung.
 - **`restart: unless-stopped`** – Container starten nach einem Neustart automatisch wieder.
 
-## Installation (Anleitung für die Lehrperson)
+---
 
-### Voraussetzungen
+## 🚀 Installation
 
-- Docker und Docker Compose müssen installiert sein (z.B. Play with Docker).
+### Option 1️⃣: Für Lehrpersonen & Schüler (EMPFOHLEN)
 
-### Schritte
+**Nutze docker-compose-install.yml:**
 
-1. **Repository klonen:**
+```bash
+git clone https://github.com/DEINBENUTZERNAME/M-347-T.git
+cd M-347-T
+docker-compose -f docker-compose-install.yml up -d
+```
 
+**Browser:** http://localhost:8080
+
+✅ **Keinerlei Builds nötig!** Images werden von Docker Hub (jaba09) gezogen.
+
+⏱️ **Dauer:** ~30-60 Sekunden
+
+---
+
+### Option 2️⃣: Für Entwickler (lokales Bauen)
+
+**Nutze docker-compose.yml:**
+
+```bash
+git clone https://github.com/DEINBENUTZERNAME/M-347-T.git
+cd M-347-T
+docker-compose up -d --build
+```
+
+**Browser:** http://localhost:8080
+
+⏱️ **Dauer:** 2-5 Minuten (Images werden lokal gebaut)
+
+**Wann nutzen?**
+- Code ändern & testen
+- Neue Dockerfiles erstellen
+- Images anpassen
+
+---
+
+### Container stoppen & neustarten
+
+**Mit docker-compose-install.yml:**
+```bash
+docker-compose -f docker-compose-install.yml down
+docker-compose -f docker-compose-install.yml up -d
+```
+
+**Mit docker-compose.yml:**
+```bash
+docker-compose down
+docker-compose up -d
+```
+
+Die Datenbank-Daten werden im Volume `db_data` persistiert!
+
+---
+
+## 🔧 Für Entwickler: Code ändern
+
+Wenn du den Backend- oder Frontend-Code ändern und testen willst:
+
+1. **Bearbeite die Dateien:**
    ```bash
-   git clone https://github.com/Sven-L09/M-347-T.git
+   # Frontend:
+   nano website/index.html
+   
+   # Backend:
+   nano backend/server.js
    ```
 
-2. **In das Projektverzeichnis wechseln:**
-
+2. **Nutze docker-compose.yml zum Bauen & Testen:**
    ```bash
-   cd M-347-T
+   docker-compose up -d --build
    ```
 
-3. **Container starten:**
-
-   ```bash
-   docker-compose up -d
-   ```
-
-4. **Webseite aufrufen:**
-
-   Öffnen Sie einen Browser und navigieren Sie zu:
-
+3. **Browser neu laden** (F5) um Änderungen zu sehen
    ```
    http://localhost:8080
    ```
 
-   In Play with Docker wird automatisch ein Link zum Port 8080 angezeigt.
-
-### Container stoppen und starten
-
-```bash
-# Container stoppen
-docker-compose down
-
-# Container erneut starten
-docker-compose up -d
-```
-
-Die Webseite und die Datenbank sind nach dem erneuten Starten wieder verfügbar. Die Datenbank-Daten werden im benannten Volume `db_data` gespeichert.
-
-### Datenbank-Verbindung
-
-Die MariaDB-Datenbank ist erreichbar über:
-
-| Parameter | Wert |
-|-----------|------|
-| Host | `db` (innerhalb von Docker) |
-| Port | `3306` |
-| Datenbank | `m347db` |
-| Benutzer | `m347user` |
-| Passwort | `m347pass` |
-
-## Webseite ändern
-
-Um Änderungen an der Webseite vorzunehmen:
-
-1. Bearbeiten Sie die Dateien im `website/`-Ordner (z.B. `website/index.html`).
-2. Da das Volume den Ordner direkt einbindet, sind Änderungen **sofort** im Browser sichtbar (Seite neu laden).
-3. Für dauerhafte Änderungen im Image:
-
+4. **Logs prüfen bei Fehlern:**
    ```bash
-   docker-compose build
-   docker-compose up -d
+   docker-compose logs -f backend
    ```
+
+**Wichtig:** Nutze `docker-compose.yml`, nicht `docker-compose-install.yml`!
