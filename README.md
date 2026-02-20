@@ -15,7 +15,7 @@ Dieses Projekt stellt eine vollständige Webapplikation mit **Docker Compose** b
 **NUTZE DIESE VARIANTE:**
 
 ```bash
-git clone https://github.com/DEINBENUTZERNAME/M-347-T.git
+git clone https://github.com/Sven-L09/M-347-T.git
 cd M-347-T
 docker-compose -f docker-compose-install.yml up -d
 ```
@@ -31,7 +31,7 @@ docker-compose -f docker-compose-install.yml up -d
 ### 🔨 Für Entwickler (lokal bauen)
 
 ```bash
-git clone https://github.com/DEINBENUTZERNAME/M-347-T.git
+git clone https://github.com/Sven-L09/M-347-T.git
 cd M-347-T
 docker-compose up -d --build
 ```
