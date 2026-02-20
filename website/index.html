@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M-347 Webserver Projekt</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">M-347 Projekt</div>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">Über uns</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#contact">Kontakt</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h1>Willkommen zum M-347 Projekt</h1>
+                <p>Dieses Projekt demonstriert einen Webserver mit Docker und Nginx.</p>
+                <a href="#about" class="btn">Mehr erfahren</a>
+            </div>
+        </section>
+
+        <section id="about" class="about">
+            <h2>Über dieses Projekt</h2>
+            <div class="card-container">
+                <div class="card">
+                    <img src="images/docker-logo.svg" alt="Docker Logo">
+                    <h3>Docker</h3>
+                    <p>Containerisierung für einfache Bereitstellung und Skalierung.</p>
+                </div>
+                <div class="card">
+                    <img src="images/nginx-logo.svg" alt="Nginx Logo">
+                    <h3>Nginx</h3>
+                    <p>Leistungsstarker Webserver für statische Inhalte.</p>
+                </div>
+                <div class="card">
+                    <img src="images/compose-logo.svg" alt="Docker Compose Logo">
+                    <h3>Docker Compose</h3>
+                    <p>Orchestrierung mehrerer Container mit einer einzigen Datei.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="services">
+            <h2>Technologien</h2>
+            <div class="tech-list">
+                <div class="tech-item">
+                    <span class="tech-icon">🐳</span>
+                    <h3>Docker Container</h3>
+                    <p>Die Webseite läuft in einem isolierten Docker-Container basierend auf dem offiziellen Nginx-Image.</p>
+                </div>
+                <div class="tech-item">
+                    <span class="tech-icon">📦</span>
+                    <h3>Docker Compose</h3>
+                    <p>Mit Docker Compose wird der Container einfach gestartet und verwaltet.</p>
+                </div>
+                <div class="tech-item">
+                    <span class="tech-icon">💾</span>
+                    <h3>Persistenz</h3>
+                    <p>Die Webseite bleibt auch nach dem Stoppen und Starten des Containers verfügbar.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact">
+            <h2>Kontakt</h2>
+            <form class="contact-form" onsubmit="event.preventDefault(); alert('Nachricht gesendet!');">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Ihr Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-Mail</label>
+                    <input type="email" id="email" name="email" placeholder="Ihre E-Mail" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Nachricht</label>
+                    <textarea id="message" name="message" placeholder="Ihre Nachricht" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn">Absenden</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 M-347 Projekt | Modul 347 - Dienst mit Container anwenden</p>
+    </footer>
+</body>
+</html>
