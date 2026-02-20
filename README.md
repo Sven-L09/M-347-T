@@ -1,6 +1,6 @@
 # M-347 Webserver Projekt
 
-Dieses Projekt stellt eine Webseite mit **Nginx** in einem **Docker-Container** bereit. Die Webseite bleibt auch nach dem Stoppen und Starten des Containers verfügbar, da die Dateien über ein Docker-Volume eingebunden werden.
+Dieses Projekt stellt eine Webseite mit **Nginx** und eine **MariaDB**-Datenbank in **Docker-Containern** bereit. Beide Services bleiben auch nach dem Stoppen und Starten der Container verfügbar, da die Daten über Docker-Volumes persistiert werden.
 
 ## Projektstruktur
 
@@ -23,7 +23,7 @@ M-347-T/
 
 1. **Webseite erstellt**: Eine HTML-Seite mit CSS und SVG-Bildern wurde im `website/`-Ordner angelegt.
 2. **Dockerfile erstellt**: Basierend auf dem offiziellen `nginx:alpine`-Image werden die Webseiten-Dateien in den Nginx-HTML-Ordner kopiert.
-3. **Docker Compose konfiguriert**: Die `docker-compose.yml` baut das Image und startet den Container mit einem Volume-Mount für Persistenz.
+3. **Docker Compose konfiguriert**: Die `docker-compose.yml` startet zwei Services – den Webserver und eine MariaDB-Datenbank – mit Volumes für Persistenz.
 
 ### Dockerfile
 
@@ -43,13 +43,31 @@ services:
       - "8080:80"
     volumes:
       - ./website:/usr/share/nginx/html:ro
+    depends_on:
+      - db
     restart: unless-stopped
+
+  db:
+    image: mariadb:10
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: m347db
+      MYSQL_USER: m347user
+      MYSQL_PASSWORD: m347pass
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: unless-stopped
+
+volumes:
+  db_data:
 ```
 
 - **`build: .`** – Baut das Image aus dem Dockerfile im aktuellen Verzeichnis.
 - **`ports: "8080:80"`** – Macht den Webserver auf Port 8080 erreichbar.
 - **`volumes`** – Bindet den `website/`-Ordner ein, damit Änderungen sofort sichtbar sind.
-- **`restart: unless-stopped`** – Container startet nach einem Neustart automatisch wieder.
+- **`depends_on: db`** – Der Webserver startet erst, wenn die Datenbank bereit ist.
+- **`db` Service** – MariaDB 10 mit einem benannten Volume `db_data` für persistente Datenspeicherung.
+- **`restart: unless-stopped`** – Container starten nach einem Neustart automatisch wieder.
 
 ## Installation (Anleitung für die Lehrperson)
 
@@ -97,7 +115,19 @@ docker-compose down
 docker-compose up -d
 ```
 
-Die Webseite ist nach dem erneuten Starten wieder verfügbar.
+Die Webseite und die Datenbank sind nach dem erneuten Starten wieder verfügbar. Die Datenbank-Daten werden im benannten Volume `db_data` gespeichert.
+
+### Datenbank-Verbindung
+
+Die MariaDB-Datenbank ist erreichbar über:
+
+| Parameter | Wert |
+|-----------|------|
+| Host | `db` (innerhalb von Docker) |
+| Port | `3306` |
+| Datenbank | `m347db` |
+| Benutzer | `m347user` |
+| Passwort | `m347pass` |
 
 ## Webseite ändern
 
