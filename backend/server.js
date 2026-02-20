@@ -22,6 +22,17 @@ const dbConfig = {
 
 let pool;
 
+async function ensureSchema() {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS todos (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      title VARCHAR(255) NOT NULL,
+      completed BOOLEAN DEFAULT FALSE,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+}
+
 async function connectWithRetry(retries = 15, delay = 3000) {
   for (let i = 0; i < retries; i++) {
     try {
@@ -88,6 +99,9 @@ app.delete('/api/todos/:id', async (req, res) => {
 });
 
 connectWithRetry()
+  .then(() => {
+    return ensureSchema();
+  })
   .then(() => {
     app.listen(3000, () => console.log('Backend running on port 3000'));
   })
